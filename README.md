@@ -4,12 +4,8 @@ This centralized GitHub action runs tests on a python app using poetry
 
 ### Usage
 
-```yml
-name: Run tests
-on: 
- <conditions-you-want-this-workflow-to-run-on>
-  jobs:  
-  code-validation:
+```yml 
+  poetry-redoc:
     needs: [self-hosted-status]
     timeout-minutes: 15
     runs-on: ${{ contains(needs.self-hosted-status.outputs.runner-status, 'online') && 'self-hosted' || 'ubuntu-latest' }}
