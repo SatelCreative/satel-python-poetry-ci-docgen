@@ -1,5 +1,6 @@
-name: Code validation using poetry
-description: Run poetry tests on a python app
+name: Code validation and document generation
+description: Run poetry tests an generate fastapi docs 
+
 inputs:
   app-name:
     description: Name of the App
