@@ -14,6 +14,9 @@ inputs:
   python-version:   
     description: Version of python app is using
     required: true
+  portal-url: 
+    description: Server path to store files
+    required: true
 
 outputs:
   REDOC_LINKS: # id of output
@@ -109,7 +112,7 @@ runs:
       run: |
         cd ${{ inputs.work-dir }}
         [ -d /mnt/samba/${{ env.REPO_NAME }} ] || mkdir -p /mnt/samba/${{ env.REPO_NAME }}
-        LINKS=(`source config.sh.example && poetry run python generate_openapi_docs.py ${{ env.BRANCH_NAME }} "/mnt/samba/${{ env.REPO_NAME }}" "https://portal.satel.ca/openapi/redoc.html?repo=${{ env.REPO_NAME }}&branch="`)
+        LINKS=(`source config.sh.example && poetry run python generate_openapi_docs.py ${{ env.BRANCH_NAME }} "/mnt/samba/${{ env.REPO_NAME }}" "${{ inputs.portal-url }}/redoc.html?repo=${{ env.REPO_NAME }}&branch="`)
         echo "REDOC_LINKS=${LINKS[@]}" >> $GITHUB_OUTPUT
       shell: bash  
       
@@ -118,5 +121,5 @@ runs:
       run: | 
         cd ${{ inputs.work-dir }}
         COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
-        echo "COVERAGE_LINKS=https://portal.satel.ca/openapi/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
+        echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
       shell: bash  
