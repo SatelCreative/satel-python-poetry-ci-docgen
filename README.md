@@ -1,6 +1,6 @@
 # Satel Python Poetry Continous Integration and Document Generation
 
-This centralized GitHub action runs tests on a python app using poetry
+This centralized GitHub action runs tests on a python app using poetry and generate redoc and model links 
 
 ### Usage
 
