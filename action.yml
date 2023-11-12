@@ -103,13 +103,13 @@ runs:
       if: ${{ github.ref == 'refs/heads/main' }}
       run: rm /mnt/samba/${{ env.REPO_NAME }}/main_*  2> /dev/null || true # to avoid permissions issue, remove main files first 
       shell: bash
-## change branch name to variable before merging 
+
     - name: Generate documentation links
       id: redoc
       run: |
         cd ${{ inputs.work-dir }}
         [ -d /mnt/samba/${{ env.REPO_NAME }} ] || mkdir -p /mnt/samba/${{ env.REPO_NAME }}
-        LINKS=(`source config.sh.example && poetry run python generate_openapi_docs.py test_rahul "/mnt/samba/${{ env.REPO_NAME }}" "https://portal.satel.ca/openapi/redoc.html?repo=${{ env.REPO_NAME }}&branch="`)
+        LINKS=(`source config.sh.example && poetry run python generate_openapi_docs.py ${{ env.BRANCH_NAME }} "/mnt/samba/${{ env.REPO_NAME }}" "https://portal.satel.ca/openapi/redoc.html?repo=${{ env.REPO_NAME }}&branch="`)
         echo "REDOC_LINKS=${LINKS[@]}" >> $GITHUB_OUTPUT
       shell: bash  
       
