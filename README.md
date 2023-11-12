@@ -6,12 +6,14 @@ This centralized GitHub action runs tests on a python app using poetry
 
 ```yml 
   poetry-redoc:
-    needs: [self-hosted-status]
     timeout-minutes: 15
-    runs-on: ${{ contains(needs.self-hosted-status.outputs.runner-status, 'online') && 'self-hosted' || 'ubuntu-latest' }}
+    runs-on: samba
     environment: ${{ inputs.environment }}
     env:
-      PYTHON_VERSION: "3.10"
+      PYTHON_VERSION: "<PYTHON_VERSION>"
+    outputs:
+      REDOC_LINKS: ${{ steps.links.outputs.REDOC_LINKS }}  
+      COVERAGE_LINKS: ${{ steps.links.outputs.COVERAGE_LINKS }} 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4.1.1
@@ -22,5 +24,6 @@ This centralized GitHub action runs tests on a python app using poetry
           app-name: ${{ inputs.app-name }}
           environment: ${{ inputs.environment }}
           work-dir: ${{ inputs.work-dir }}
-          python-version: ${{ env.PYTHON_VERSION }} 
+          python-version: ${{ env.PYTHON_VERSION }}
+          portal-url: "<PORTAL-URL>"
 ```
