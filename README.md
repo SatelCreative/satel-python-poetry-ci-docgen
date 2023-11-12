@@ -1,4 +1,4 @@
-# Satel Python Poetry Continous-Integration-Doc-Generation
+# Satel Python Poetry Continous-Integration Document Generation
 
 This centralized GitHub action runs tests on a python app using poetry
 
