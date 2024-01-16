@@ -77,7 +77,7 @@ runs:
       shell: bash
 
     - name: Upload xml reports
-      uses: actions/upload-artifact@v4.1.1
+      uses: actions/upload-artifactv4.1.0
       with:
         name: xml-reports
         path: ${{ inputs.work-dir }}/coverage.xml 
