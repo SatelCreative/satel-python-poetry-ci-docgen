@@ -17,6 +17,10 @@ inputs:
   portal-url: 
     description: Server path to store files
     required: true
+  artifact: 
+    description: Name of artifact 
+    required: false
+    default: "xml-reports"   
 
 outputs:
   REDOC_LINKS: # id of output
@@ -79,7 +83,7 @@ runs:
     - name: Upload xml reports
       uses: actions/upload-artifact@v4.1.0
       with:
-        name: xml-reports
+        name: ${{ inputs.artifact }} 
         path: ${{ inputs.work-dir }}/coverage.xml 
         retention-days: 5  
 
