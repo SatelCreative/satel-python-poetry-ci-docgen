@@ -26,7 +26,7 @@ jobs:
         # saadmk11/github doesn't work on Self hosted runner yet 
         runs-on: ubuntu-latest #${{ contains(needs.self-hosted-status.outputs.runner-status, 'online') && 'self-hosted' || 'ubuntu-latest' }}
         steps:
-          - uses: actions/checkout@v4.1.1
+          - uses: actions/checkout@v4.1.6
             with:
               # Classic personal access token with repo and workflow scope
               token: ${{ secrets.REPO_WORKFLOW_ACCESS_TOKEN }} 
