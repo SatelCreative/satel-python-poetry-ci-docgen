@@ -42,26 +42,10 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
-    - name: Load cached Poetry installation
-      id: poetry-cache
-      uses: actions/cache@v3.3.2
-      with:
-        path: ~/.local # the path depends on the OS
-        key: poetry-${{ inputs.work-dir }}  # increment to reset cache
-
     - name: Install Poetry
       uses: snok/install-poetry@v1.3.4
-      if: steps.poetry-cache.outputs.cache-hit != 'true'
-
-    - name: Load cached venv
-      id: venv-cache
-      uses: actions/cache@v3.3.2
-      with:
-        path: ~/.cache/pypoetry/virtualenvs
-        key: ${{ inputs.work-dir }}-${{ hashFiles('**/poetry.lock') }}
 
     - name: Install dependencies
-      if: steps.venv-cache.outputs.cache-hit != 'true'
       run: |
         cd ${{ inputs.work-dir }}
         poetry env use ${{ inputs.python-version }}
