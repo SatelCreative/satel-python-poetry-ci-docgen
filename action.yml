@@ -1,5 +1,5 @@
 name: Code validation and document generation
-description: Run poetry tests an generate fastapi docs 
+description: Run poetry tests and generate FastAPI docs
 
 inputs:
   app-name:
@@ -9,10 +9,10 @@ inputs:
     description: Environment this action runs on
     required: false
   work-dir:
-    description: Location of all the App related files
+    description: Location of all the App-related files
     required: true
   python-version:   
-    description: Version of python app is using
+    description: Version of Python app is using
     required: true
   portal-url: 
     description: Server path to store files
@@ -37,7 +37,7 @@ runs:
     - name: Check out repository
       uses: actions/checkout@v4.1.1
 
-    - name: Set up python
+    - name: Set up Python
       uses: actions/setup-python@v4.7.1
       with:
         python-version: ${{ inputs.python-version }}
@@ -58,20 +58,20 @@ runs:
         source config.sh.example && poetry run poe codevalidation
       shell: bash
 
-    - name: Generate xml report
+    - name: Generate XML report
       run: |
         cd ${{ inputs.work-dir }}
         source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
       shell: bash
 
-    - name: Upload xml reports
+    - name: Upload XML reports
       uses: actions/upload-artifact@v4.1.0
       with:
         name: ${{ inputs.artifact }} 
         path: ${{ inputs.work-dir }}/coverage.xml 
         retention-days: 5  
 
-# Doc generation
+  # Doc generation
     - name: Get PR branch  # this only works on a PR not on a branch 
       run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/*/})" >> $GITHUB_ENV
       shell: bash
@@ -86,16 +86,12 @@ runs:
       shell: bash
 
     - name: Clean old models
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: rm /mnt/samba/${{ env.REPO_NAME }}/main_*  2> /dev/null || true # to avoid permissions issue, remove main files first 
-      shell: bash
-
-    - name: Clean old models
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: rm /mnt/samba/${{ env.REPO_NAME }}/main_*  2> /dev/null || true # to avoid permissions issue, remove main files first 
+      if: ${{ github.ref == 'refs/heads/main' && inputs.portal-url != '' }}
+      run: rm /mnt/samba/${{ env.REPO_NAME }}/main_*  2> /dev/null || true
       shell: bash
 
     - name: Generate documentation links
+      if: ${{ inputs.portal-url != '' }}
       id: redoc
       run: |
         cd ${{ inputs.work-dir }}
@@ -104,10 +100,11 @@ runs:
         echo "REDOC_LINKS=${LINKS[@]}" >> $GITHUB_OUTPUT
       shell: bash  
       
-    - name: Generate coverage html link 
+    - name: Generate coverage HTML link 
+      if: ${{ inputs.portal-url != '' }}
       id: cov_link
       run: | 
         cd ${{ inputs.work-dir }}
         COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
         echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
-      shell: bash  
+      shell: bash
