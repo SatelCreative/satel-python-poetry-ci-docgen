@@ -7,7 +7,7 @@ inputs:
     required: true
   environment:
     description: Environment this action runs on
-    required: true
+    required: false
   work-dir:
     description: Location of all the App related files
     required: true
@@ -16,7 +16,7 @@ inputs:
     required: true
   portal-url: 
     description: Server path to store files
-    required: true
+    required: false
   artifact: 
     description: Name of artifact 
     required: false
