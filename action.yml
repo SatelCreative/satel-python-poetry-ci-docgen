@@ -100,11 +100,11 @@ runs:
         echo "REDOC_LINKS=${LINKS[@]}" >> $GITHUB_OUTPUT
       shell: bash  
       
-    - name: Generate coverage HTML link 
-      if: ${{ inputs.portal-url != '' }}
-      id: cov_link
-      run: | 
-        cd ${{ inputs.work-dir }}
-        COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
-        echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
-      shell: bash
+    # - name: Generate coverage HTML link 
+    #   if: ${{ inputs.portal-url != '' }}
+    #   id: cov_link
+    #   run: | 
+    #     cd ${{ inputs.work-dir }}
+    #     COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
+    #     echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
+    #   shell: bash
