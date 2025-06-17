@@ -47,6 +47,7 @@ runs:
 
     - name: Install dependencies
       run: |
+        echo "<<<< ---  Install dependencies --- >>>>"
         cd ${{ inputs.work-dir }}
         poetry env use ${{ inputs.python-version }}
         poetry install --no-interaction --no-root
@@ -55,12 +56,15 @@ runs:
 
     - name: Run poethepoet 
       run: |
+        echo "<<<< ---  Run poethepoet  --- >>>>"
         cd ${{ inputs.work-dir }}
+        poetry run pip install pytest-cov
         source config.sh.example && poetry run poe codevalidation
       shell: bash
 
     - name: Generate XML report
       run: |
+        echo "<<<< ---  Generate XML report --- >>>>"
         cd ${{ inputs.work-dir }}
         source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
       shell: bash
