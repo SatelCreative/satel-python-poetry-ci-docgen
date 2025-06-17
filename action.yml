@@ -47,19 +47,23 @@ runs:
 
     - name: Install dependencies
       run: |
+        echo "<<<< ---  Install dependencies --- >>>>"
         cd ${{ inputs.work-dir }}
         poetry env use ${{ inputs.python-version }}
         poetry install --no-interaction --no-root
+        poetry run pip install pytest-cov  ## need this for cov flag
       shell: bash  
 
     - name: Run poethepoet 
       run: |
+        echo "<<<< ---  Run poethepoet  --- >>>>"
         cd ${{ inputs.work-dir }}
         source config.sh.example && poetry run poe codevalidation
       shell: bash
 
     - name: Generate XML report
       run: |
+        echo "<<<< ---  Generate XML report --- >>>>"
         cd ${{ inputs.work-dir }}
         source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
       shell: bash
@@ -94,6 +98,7 @@ runs:
       if: ${{ inputs.portal-url != '' }}
       id: redoc
       run: |
+        echo "<<<< ---  Generate documentation links --- >>>>"
         cd ${{ inputs.work-dir }}
         [ -d /mnt/samba/${{ env.REPO_NAME }} ] || mkdir -p /mnt/samba/${{ env.REPO_NAME }}
         LINKS=(`source config.sh.example && poetry run python generate_openapi_docs.py ${{ env.BRANCH_NAME }} "/mnt/samba/${{ env.REPO_NAME }}" "${{ inputs.portal-url }}/redoc.html?repo=${{ env.REPO_NAME }}&branch="`)
@@ -104,6 +109,7 @@ runs:
       if: ${{ inputs.portal-url != '' }}
       id: cov_link
       run: | 
+        echo "<<<< ---  Generate coverage HTML link  --- >>>>"
         cd ${{ inputs.work-dir }}
         COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
         echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
