@@ -50,6 +50,7 @@ runs:
         cd ${{ inputs.work-dir }}
         poetry env use ${{ inputs.python-version }}
         poetry install --no-interaction --no-root
+        poetry run pip install pytest-cov
       shell: bash  
 
     - name: Run poethepoet 
@@ -58,18 +59,18 @@ runs:
         source config.sh.example && poetry run poe codevalidation
       shell: bash
 
-    # - name: Generate XML report
-    #   run: |
-    #     cd ${{ inputs.work-dir }}
-    #     source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
-    #   shell: bash
+    - name: Generate XML report
+      run: |
+        cd ${{ inputs.work-dir }}
+        source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
+      shell: bash
 
-    # - name: Upload XML reports
-    #   uses: actions/upload-artifact@v4.1.0
-    #   with:
-    #     name: ${{ inputs.artifact }} 
-    #     path: ${{ inputs.work-dir }}/coverage.xml 
-    #     retention-days: 5  
+    - name: Upload XML reports
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: ${{ inputs.artifact }} 
+        path: ${{ inputs.work-dir }}/coverage.xml 
+        retention-days: 5  
 
   # Doc generation
     - name: Get PR branch  # this only works on a PR not on a branch 
@@ -100,11 +101,11 @@ runs:
         echo "REDOC_LINKS=${LINKS[@]}" >> $GITHUB_OUTPUT
       shell: bash  
       
-    # - name: Generate coverage HTML link 
-    #   if: ${{ inputs.portal-url != '' }}
-    #   id: cov_link
-    #   run: | 
-    #     cd ${{ inputs.work-dir }}
-    #     COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
-    #     echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
-    #   shell: bash
+    - name: Generate coverage HTML link 
+      if: ${{ inputs.portal-url != '' }}
+      id: cov_link
+      run: | 
+        cd ${{ inputs.work-dir }}
+        COVERAGE=(`source config.sh.example && poetry run pytest --cov --cov-report=html:/mnt/samba/${{ env.REPO_NAME }}/${{ env.BRANCH_NAME }}/${{inputs.app-name}}/coverage`)
+        echo "COVERAGE_LINKS=${{ inputs.portal-url }}/coverage.html?repo=${{ env.REPO_NAME }}&branch=${{ env.BRANCH_NAME }}&app=${{inputs.app-name}}" >> $GITHUB_OUTPUT
+      shell: bash
