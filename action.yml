@@ -58,18 +58,18 @@ runs:
         source config.sh.example && poetry run poe codevalidation
       shell: bash
 
-    - name: Generate XML report
-      run: |
-        cd ${{ inputs.work-dir }}
-        source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
-      shell: bash
+    # - name: Generate XML report
+    #   run: |
+    #     cd ${{ inputs.work-dir }}
+    #     source config.sh.example && poetry run pytest --cov --cov-report=xml:coverage.xml
+    #   shell: bash
 
-    - name: Upload XML reports
-      uses: actions/upload-artifact@v4.1.0
-      with:
-        name: ${{ inputs.artifact }} 
-        path: ${{ inputs.work-dir }}/coverage.xml 
-        retention-days: 5  
+    # - name: Upload XML reports
+    #   uses: actions/upload-artifact@v4.1.0
+    #   with:
+    #     name: ${{ inputs.artifact }} 
+    #     path: ${{ inputs.work-dir }}/coverage.xml 
+    #     retention-days: 5  
 
   # Doc generation
     - name: Get PR branch  # this only works on a PR not on a branch 
