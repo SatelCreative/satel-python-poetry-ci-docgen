@@ -42,3 +42,4 @@ jobs:
               pull_request_labels: 'Type: DevOps'
               update_version_with: "release-tag"
               release_types: 'major, minor, patch'
+              extra_workflow_locations: "action.yml"
